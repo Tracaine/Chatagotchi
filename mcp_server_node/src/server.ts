@@ -39,6 +39,18 @@ export function getServer(): McpServer {
           _meta: {
             'openai/widgetDescription':
               "Renders a micro-UI showing the user's pet status.",
+            ui: {
+              domain: config.FRONTEND_DOMAIN,
+              csp: {
+                connectDomains: [],
+                resourceDomains: [config.FRONTEND_DOMAIN],
+              },
+            },
+            'openai/widgetDomain': config.FRONTEND_DOMAIN,
+            'openai/widgetCSP': {
+              connect_domains: [],
+              resource_domains: [config.FRONTEND_DOMAIN],
+            },
           },
         },
       ],
@@ -187,6 +199,18 @@ export function getServer(): McpServer {
             _meta: {
               'openai/widgetDescription':
                 "Renders a micro-UI showing the user's achievements.",
+              ui: {
+                domain: config.FRONTEND_DOMAIN,
+                csp: {
+                  connectDomains: [],
+                  resourceDomains: [config.FRONTEND_DOMAIN],
+                },
+              },
+              'openai/widgetDomain': config.FRONTEND_DOMAIN,
+              'openai/widgetCSP': {
+                connect_domains: [],
+                resource_domains: [config.FRONTEND_DOMAIN],
+              },
             },
           },
         ],
