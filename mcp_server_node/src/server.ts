@@ -7,6 +7,10 @@ import type {
   TurnResult,
 } from '../../shared-types/game-types.ts';
 
+const PET_WIDGET_URI = 'ui://widget/pet-v2.html';
+const ACHIEVEMENTS_WIDGET_URI = 'ui://widget/achievements-v2.html';
+const WIDGET_MIME_TYPE = 'text/html;profile=mcp-app';
+
 export function getServer(): McpServer {
   const server = new McpServer({
     name: 'chatagotchi-server',
@@ -25,31 +29,33 @@ export function getServer(): McpServer {
     ],
   }));
 
-  server.registerResource('pet-status', 'ui://widget/pet.html', {}, () => {
+  server.registerResource('pet-status', PET_WIDGET_URI, {}, () => {
+    const frontendOrigin = new URL(config.FRONTEND_DOMAIN).origin;
+
     return {
       contents: [
         {
-          uri: 'ui://widget/pet.html',
-          mimeType: 'text/html+skybridge',
+          uri: PET_WIDGET_URI,
+          mimeType: WIDGET_MIME_TYPE,
           text: `
             <div id="pet-root"></div>
-            <link rel="stylesheet" href="${config.FRONTEND_DOMAIN}/pet.css">
-            <script type="module" src="${config.FRONTEND_DOMAIN}/pet.js"></script>
+            <link rel="stylesheet" href="${frontendOrigin}/pet.css">
+            <script type="module" src="${frontendOrigin}/pet.js"></script>
           `.trim(),
           _meta: {
             'openai/widgetDescription':
               "Renders a micro-UI showing the user's pet status.",
             ui: {
-              domain: config.FRONTEND_DOMAIN,
+              domain: frontendOrigin,
               csp: {
                 connectDomains: [],
-                resourceDomains: [config.FRONTEND_DOMAIN],
+                resourceDomains: [frontendOrigin],
               },
             },
-            'openai/widgetDomain': config.FRONTEND_DOMAIN,
+            'openai/widgetDomain': frontendOrigin,
             'openai/widgetCSP': {
               connect_domains: [],
-              resource_domains: [config.FRONTEND_DOMAIN],
+              resource_domains: [frontendOrigin],
             },
           },
         },
@@ -64,7 +70,8 @@ export function getServer(): McpServer {
       description:
         'Kicks off a new game with a brand new pet. Be sure to name them!',
       _meta: {
-        'openai/outputTemplate': 'ui://widget/pet.html',
+        ui: { resourceUri: PET_WIDGET_URI },
+        'openai/outputTemplate': PET_WIDGET_URI,
         'openai/toolInvocation/invoking': 'Waking up your new pet',
         'openai/toolInvocation/invoked': 'Say hello to your new pet!',
         'openai/widgetAccessible': true,
@@ -98,7 +105,8 @@ export function getServer(): McpServer {
       description:
         'Feed your pet with 🍎 Apple, 🍪 Cookie, 🥗 Salad, or 🍕 Pizza',
       _meta: {
-        'openai/outputTemplate': 'ui://widget/pet.html',
+        ui: { resourceUri: PET_WIDGET_URI },
+        'openai/outputTemplate': PET_WIDGET_URI,
         'openai/toolInvocation/invoking': 'Feeding your pet',
         'openai/toolInvocation/invoked': 'Fed your pet!',
         'openai/widgetAccessible': true,
@@ -141,7 +149,8 @@ export function getServer(): McpServer {
       description:
         'Play with your pet: 🎮 Video Games, 🏃 Go for Run, or 🎿 Skiing in Alps',
       _meta: {
-        'openai/outputTemplate': 'ui://widget/pet.html',
+        ui: { resourceUri: PET_WIDGET_URI },
+        'openai/outputTemplate': PET_WIDGET_URI,
         'openai/toolInvocation/invoking': 'Playing with your pet',
         'openai/toolInvocation/invoked': 'Played with your pet!',
         'openai/widgetAccessible': true,
@@ -183,33 +192,35 @@ export function getServer(): McpServer {
 
   server.registerResource(
     'achievements-widget',
-    'ui://widget/achievements.html',
+    ACHIEVEMENTS_WIDGET_URI,
     {},
     () => {
+      const frontendOrigin = new URL(config.FRONTEND_DOMAIN).origin;
+
       return {
         contents: [
           {
-            uri: 'ui://widget/achievements.html',
-            mimeType: 'text/html+skybridge',
+            uri: ACHIEVEMENTS_WIDGET_URI,
+            mimeType: WIDGET_MIME_TYPE,
             text: `
             <div id="achievements-root"></div>
-            <link rel="stylesheet" href="${config.FRONTEND_DOMAIN}/achievements.css">
-            <script type="module" src="${config.FRONTEND_DOMAIN}/achievements.js"></script>
+            <link rel="stylesheet" href="${frontendOrigin}/achievements.css">
+            <script type="module" src="${frontendOrigin}/achievements.js"></script>
           `.trim(),
             _meta: {
               'openai/widgetDescription':
                 "Renders a micro-UI showing the user's achievements.",
               ui: {
-                domain: config.FRONTEND_DOMAIN,
+                domain: frontendOrigin,
                 csp: {
                   connectDomains: [],
-                  resourceDomains: [config.FRONTEND_DOMAIN],
+                  resourceDomains: [frontendOrigin],
                 },
               },
-              'openai/widgetDomain': config.FRONTEND_DOMAIN,
+              'openai/widgetDomain': frontendOrigin,
               'openai/widgetCSP': {
                 connect_domains: [],
-                resource_domains: [config.FRONTEND_DOMAIN],
+                resource_domains: [frontendOrigin],
               },
             },
           },
@@ -224,7 +235,8 @@ export function getServer(): McpServer {
       title: 'View Achievements',
       description: 'View all your unlocked and locked achievements',
       _meta: {
-        'openai/outputTemplate': 'ui://widget/achievements.html',
+        ui: { resourceUri: ACHIEVEMENTS_WIDGET_URI },
+        'openai/outputTemplate': ACHIEVEMENTS_WIDGET_URI,
         'openai/toolInvocation/invoking': 'Loading your achievements',
         'openai/toolInvocation/invoked': 'Here are your achievements!',
         'openai/widgetAccessible': true,
